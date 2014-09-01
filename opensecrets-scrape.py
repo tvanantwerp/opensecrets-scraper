@@ -8,4 +8,9 @@ response = requests.get(url)
 soup = bs4.BeautifulSoup(response.text)
 rows = soup.find('div', id='tabwrap').tbody.find_all('tr')
 
-print rows
+for row in rows:
+	tds = row('td')
+	cells = []
+	for td in tds:
+		cells += td.contents
+	print cells
