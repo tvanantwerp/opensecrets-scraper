@@ -1,8 +1,15 @@
 import requests
 import bs4
 import csv
+import urllib
 
-url = 'https://www.opensecrets.org/indivs/search.php?&name=&employ=walmart&cand=&state=&cycle=All&soft=&zip=&sort=R&page=1'
+params = {
+	'employ': 'walmart',
+	'page': 1
+}
+
+baseurl = 'https://www.opensecrets.org/indivs/search.php?&name=&cand=&state=&cycle=All&soft=&zip=&sort=R&'
+url = baseurl + urllib.urlencode(params)
 
 response = requests.get(url)
 
