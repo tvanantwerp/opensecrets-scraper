@@ -9,7 +9,7 @@ initialParams = {
 	'totalPages': 9999
 }
 
-output = []
+output = [['Name', 'Location', 'Employer', 'Date', 'Amount', 'Recipient']]
 
 baseurl = 'https://www.opensecrets.org/indivs/search.php?&name=&cand=&state=&cycle=All&soft=&zip=&sort=R&'
 url = baseurl + urllib.urlencode(initialParams)
@@ -20,9 +20,14 @@ soup = bs4.BeautifulSoup(response.text)
 pages = soup.find('div', 'pageCtrl').find_all('a')
 initialParams['totalPages'] = int(pages[len(pages)-2].contents[0])
 
+print 'Retrieving ' + str(initialParams['totalPages']) + ' pages'
+
 while (initialParams['page'] <= initialParams['totalPages']):
 	url = baseurl + urllib.urlencode(initialParams)
 	response = requests.get(url)
+	
+	print 'Retrieving page ' + str(initialParams['page'])
+
 	soup = bs4.BeautifulSoup(response.text)
 	rows = soup.find('div', id='tabwrap').tbody.find_all('tr')
 	
