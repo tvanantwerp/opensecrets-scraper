@@ -1,3 +1,4 @@
+import re
 import requests
 import bs4
 import csv
@@ -9,7 +10,7 @@ initialParams = {
 	'totalPages': 9999
 }
 
-header = ['Name', 'City and State', 'Zip', 'Employer', 'Date', 'Amount', 'Recipient']
+header = ['Name', 'City', 'State', 'Zip', 'Employer', 'Date', 'Amount', 'Recipient']
 output = []
 
 baseurl = 'https://www.opensecrets.org/indivs/search.php?&name=&cand=&state=&cycle=All&soft=&zip=&sort=R&'
@@ -42,11 +43,11 @@ while (initialParams['page'] <= initialParams['totalPages']):
 	initialParams['page'] += 1
 
 for line in output:
-	address = str(line[1])[4:len(str(line[1]))-5].split('\xc2\xa0')
+	a = str(line[1])[4:len(str(line[1]))-5]
+	address = re.split('\xc2\xa0|, ',a)
 	line.pop(1)
 	for x in reversed(address):
 		line.insert(1, unicode(x))
-	print line
 
 output.insert(0, header)
 
