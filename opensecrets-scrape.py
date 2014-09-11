@@ -4,12 +4,13 @@ import csv
 import urllib
 
 initialParams = {
-	'employ': 'cato institute',
+	'employ': 'walmart',
 	'page': 1,
 	'totalPages': 9999
 }
 
-output = [['Name', 'Location', 'Employer', 'Date', 'Amount', 'Recipient']]
+header = ['Name', 'Zip', 'City and State', 'Employer', 'Date', 'Amount', 'Recipient']
+output = []
 
 baseurl = 'https://www.opensecrets.org/indivs/search.php?&name=&cand=&state=&cycle=All&soft=&zip=&sort=R&'
 url = baseurl + urllib.urlencode(initialParams)
@@ -25,7 +26,7 @@ print 'Retrieving ' + str(initialParams['totalPages']) + ' pages'
 while (initialParams['page'] <= initialParams['totalPages']):
 	url = baseurl + urllib.urlencode(initialParams)
 	response = requests.get(url)
-	
+
 	print 'Retrieving page ' + str(initialParams['page'])
 
 	soup = bs4.BeautifulSoup(response.text)
@@ -41,9 +42,13 @@ while (initialParams['page'] <= initialParams['totalPages']):
 	initialParams['page'] += 1
 
 for line in output:
-	address = str(line[1])
-	address = address[4:len(address)-5]
-	line[1] = address
+	address = str(line[1])[4:len(str(line[1]))-5].split('\xc2\xa0')
+	line.pop(1)
+	for x in address:
+		line.insert(1, unicode(x))
+	print line
+
+output.insert(0, header)
 
 with open('secrets.csv', 'wb') as csvfile:
 	writer = csv.writer(csvfile)
