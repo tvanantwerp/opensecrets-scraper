@@ -9,7 +9,7 @@ initialParams = {
 	'totalPages': 9999
 }
 
-header = ['Name', 'Zip', 'City and State', 'Employer', 'Date', 'Amount', 'Recipient']
+header = ['Name', 'City and State', 'Zip', 'Employer', 'Date', 'Amount', 'Recipient']
 output = []
 
 baseurl = 'https://www.opensecrets.org/indivs/search.php?&name=&cand=&state=&cycle=All&soft=&zip=&sort=R&'
@@ -44,7 +44,7 @@ while (initialParams['page'] <= initialParams['totalPages']):
 for line in output:
 	address = str(line[1])[4:len(str(line[1]))-5].split('\xc2\xa0')
 	line.pop(1)
-	for x in address:
+	for x in reversed(address):
 		line.insert(1, unicode(x))
 	print line
 
