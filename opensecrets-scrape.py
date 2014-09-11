@@ -4,7 +4,7 @@ import csv
 import urllib
 
 initialParams = {
-	'employ': 'walmart',
+	'employ': 'cato institute',
 	'page': 1,
 	'totalPages': 9999
 }
@@ -39,6 +39,11 @@ while (initialParams['page'] <= initialParams['totalPages']):
 		output.append(cells)
 
 	initialParams['page'] += 1
+
+for line in output:
+	address = str(line[1])
+	address = address[4:len(address)-5]
+	line[1] = address
 
 with open('secrets.csv', 'wb') as csvfile:
 	writer = csv.writer(csvfile)
