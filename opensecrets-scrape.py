@@ -5,12 +5,12 @@ import csv
 import urllib
 
 initialParams = {
-	'employ': 'walmart',
+	'employ': 'cato institute',
 	'page': 1,
 	'totalPages': 9999
 }
 
-header = ['Name', 'City', 'State', 'Zip', 'Employer', 'Date', 'Amount', 'Recipient']
+header = ['First Name', 'Last Name', 'City', 'State', 'Zip', 'Employer', 'Date', 'Amount', 'Recipient']
 output = []
 
 baseurl = 'https://www.opensecrets.org/indivs/search.php?&name=&cand=&state=&cycle=All&soft=&zip=&sort=R&'
@@ -43,11 +43,15 @@ while (initialParams['page'] <= initialParams['totalPages']):
 	initialParams['page'] += 1
 
 for line in output:
+	n = str(line[0])
 	a = str(line[1])[4:len(str(line[1]))-5]
-	address = re.split('\xc2\xa0|, ',a)
-	line.pop(1)
-	for x in reversed(address):
-		line.insert(1, unicode(x))
+	names = n.split(', ')
+	addresses = re.split('\xc2\xa0|, ',a)
+	del line[0:2]
+	for name in names:
+		line.insert(0, unicode(name))
+	for address in reversed(addresses):
+		line.insert(2, unicode(address))
 
 output.insert(0, header)
 
