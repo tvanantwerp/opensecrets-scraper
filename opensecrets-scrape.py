@@ -5,7 +5,7 @@ import csv
 import urllib
 
 initialParams = {
-	'employ': 'cato institute',
+	'employ': 'walmart',
 	'page': 1,
 	'totalPages': 9999
 }
@@ -20,7 +20,10 @@ response = requests.get(url)
 
 soup = bs4.BeautifulSoup(response.text)
 pages = soup.find('div', 'pageCtrl').find_all('a')
-initialParams['totalPages'] = int(pages[len(pages)-2].contents[0])
+if pages != []:
+	initialParams['totalPages'] = int(pages[len(pages)-2].contents[0])
+else:
+	initialParams['totalPages'] = 1
 
 print 'Retrieving ' + str(initialParams['totalPages']) + ' pages'
 
@@ -45,7 +48,10 @@ while (initialParams['page'] <= initialParams['totalPages']):
 for line in output:
 	n = str(line[0])
 	a = str(line[1])[4:len(str(line[1]))-5]
-	names = n.split(', ')
+	if n.find(', ') == -1:
+		names = [n, '']
+	else:
+		names = n.split(', ')
 	addresses = re.split('\xc2\xa0|, ',a)
 	del line[0:2]
 	for name in names:
