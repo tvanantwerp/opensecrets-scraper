@@ -5,7 +5,14 @@ import csv
 import urllib
 
 initialParams = {
+	'name': '',
+	'cand': '',
 	'employ': 'whole foods',
+	'state': '',
+	'zip': '',
+	'cycle': 'All',
+	'soft': '',
+	'sort': 'R',
 	'page': 1
 }
 
@@ -14,7 +21,7 @@ totalPages = 9999
 header = ['First Name', 'Last Name', 'City', 'State', 'Zip', 'Employer', 'Date', 'Amount', 'Recipient']
 output = []
 
-baseurl = 'https://www.opensecrets.org/indivs/search.php?&name=&cand=&state=&cycle=All&soft=&zip=&sort=R&'
+baseurl = 'https://www.opensecrets.org/indivs/search.php?&'
 url = baseurl + urllib.urlencode(initialParams)
 
 response = requests.get(url)
