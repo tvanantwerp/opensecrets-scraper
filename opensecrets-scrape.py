@@ -5,7 +5,7 @@ import csv
 import urllib
 
 initialParams = {
-	'employ': 'tax foundation',
+	'employ': 'whole foods',
 	'page': 1
 }
 
