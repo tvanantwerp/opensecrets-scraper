@@ -6,9 +6,10 @@ import urllib
 
 initialParams = {
 	'employ': 'walmart',
-	'page': 1,
-	'totalPages': 9999
+	'page': 1
 }
+
+totalPages = 9999
 
 header = ['First Name', 'Last Name', 'City', 'State', 'Zip', 'Employer', 'Date', 'Amount', 'Recipient']
 output = []
@@ -21,13 +22,13 @@ response = requests.get(url)
 soup = bs4.BeautifulSoup(response.text)
 pages = soup.find('div', 'pageCtrl').find_all('a')
 if pages != []:
-	initialParams['totalPages'] = int(pages[len(pages)-2].contents[0])
+	totalPages = int(pages[len(pages)-2].contents[0])
 else:
-	initialParams['totalPages'] = 1
+	totalPages = 1
 
-print 'Retrieving ' + str(initialParams['totalPages']) + ' pages'
+print 'Retrieving ' + str(totalPages) + ' pages'
 
-while (initialParams['page'] <= initialParams['totalPages']):
+while (initialParams['page'] <= totalPages):
 	url = baseurl + urllib.urlencode(initialParams)
 	response = requests.get(url)
 
@@ -35,7 +36,7 @@ while (initialParams['page'] <= initialParams['totalPages']):
 
 	soup = bs4.BeautifulSoup(response.text)
 	rows = soup.find('div', id='tabwrap').tbody.find_all('tr')
-	
+
 	for row in rows:
 		tds = row('td')
 		cells = []
