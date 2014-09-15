@@ -5,7 +5,7 @@ import csv
 import urllib
 
 initialParams = {
-	'employ': 'walmart',
+	'employ': 'tax foundation',
 	'page': 1
 }
 
@@ -19,6 +19,7 @@ url = baseurl + urllib.urlencode(initialParams)
 
 response = requests.get(url)
 
+# Get the total number of pages of results for this query
 soup = bs4.BeautifulSoup(response.text)
 pages = soup.find('div', 'pageCtrl').find_all('a')
 if pages != []:
@@ -28,6 +29,7 @@ else:
 
 print 'Retrieving ' + str(totalPages) + ' pages'
 
+# Retrieve all pages of results and parse into 'output'
 while (initialParams['page'] <= totalPages):
 	url = baseurl + urllib.urlencode(initialParams)
 	response = requests.get(url)
@@ -46,6 +48,7 @@ while (initialParams['page'] <= totalPages):
 
 	initialParams['page'] += 1
 
+# Reformat messy data
 for line in output:
 	n = str(line[0])
 	a = str(line[1])[4:len(str(line[1]))-5]
@@ -55,14 +58,12 @@ for line in output:
 		names = n.split(', ')
 	addresses = re.split('\xc2\xa0|, ',a)
 	del line[0:2]
-	for name in names:
-		line.insert(0, unicode(name))
-	for address in reversed(addresses):
-		line.insert(2, unicode(address))
+	[line.insert(0, unicode(name)) for name in names]
+	[line.insert(2, unicode(address)) for address in reversed(addresses)]
 
 output.insert(0, header)
 
+# Write csv
 with open('secrets.csv', 'wb') as csvfile:
 	writer = csv.writer(csvfile)
-	for line in output:
-		writer.writerow(line)
+	[writer.writerow(line) for line in output]
