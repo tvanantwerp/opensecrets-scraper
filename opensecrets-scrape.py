@@ -1,8 +1,8 @@
 import re
+import urllib
+import csv
 import requests
 import bs4
-import csv
-import urllib
 
 initialParams = {
     'name': '',
