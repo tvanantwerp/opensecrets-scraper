@@ -4,7 +4,7 @@ import csv
 import requests
 import bs4
 
-initialParams = {
+PARAMS = {
     'name': '',
     'cand': '',
     'employ': 'whole foods',
@@ -22,7 +22,7 @@ header = ['First Name', 'Last Name', 'City', 'State', 'Zip', 'Employer', 'Date',
 output = []
 
 baseurl = 'http://www.opensecrets.org/donor-lookup/results?'
-url = baseurl + urllib.parse.urlencode(initialParams)
+url = baseurl + urllib.parse.urlencode(PARAMS)
 response = requests.get(url)
 
 # Get the total number of pages of results for this query
@@ -37,11 +37,11 @@ else:
 print('Retrieving ' + str(totalPages) + ' pages')
 
 # Retrieve all pages of results and parse into 'output'
-while initialParams['page'] <= totalPages:
-    url = baseurl + urllib.urlencode(initialParams)
+while PARAMS['page'] <= totalPages:
+    url = baseurl + urllib.parse.urlencode(PARAMS)
     response = requests.get(url)
 
-    print('Retrieving page ' + str(initialParams['page']))
+    print('Retrieving page ' + str(PARAMS['page']))
 
     soup = bs4.BeautifulSoup(response.text)
     rows = soup.find('div', id='tabwrap').tbody.find_all('tr')
@@ -53,7 +53,7 @@ while initialParams['page'] <= totalPages:
             cells += td.contents
         output.append(cells)
 
-    initialParams['page'] += 1
+    PARAMS['page'] += 1
 
 # Reformat messy data
 for line in output:
